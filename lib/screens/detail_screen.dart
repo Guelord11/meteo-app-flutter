@@ -24,6 +24,7 @@ class DetailScreen extends StatelessWidget {
         actions: const [BoutonTheme(), SizedBox(width: 8)],
       ),
       body: Container(
+        constraints: const BoxConstraints.expand(),
         decoration: BoxDecoration(gradient: AppTheme.degrade(context)),
         child: SafeArea(
           child: SingleChildScrollView(
@@ -178,8 +179,10 @@ class DetailScreen extends StatelessWidget {
         border: Border.all(color: couleurs.outlineVariant),
       ),
       child: Column(
+        // Alignement en haut : sans cela, une valeur sur deux lignes (le vent
+        // et sa direction) decale son libelle par rapport a la carte voisine.
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Row(
             children: [
