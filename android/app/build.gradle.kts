@@ -17,7 +17,7 @@ val proprietesLocales = Properties().apply {
 val cleGoogleMaps: String = proprietesLocales.getProperty("googleMapsApiKey") ?: ""
 
 android {
-    namespace = "com.example.meteo_app"
+    namespace = "sn.isi.iage.meteoapp"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -27,8 +27,7 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.meteo_app"
+        applicationId = "sn.isi.iage.meteoapp"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion

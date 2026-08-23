@@ -1,4 +1,4 @@
-package com.example.meteo_app
+package sn.isi.iage.meteoapp
 
 import io.flutter.embedding.android.FlutterActivity
 
