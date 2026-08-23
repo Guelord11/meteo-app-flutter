@@ -80,8 +80,20 @@ flutter run
 
 ### Clé Google Maps
 
-La carte de l'écran de détail nécessite une clé Google Maps. Ajoutez-la dans
-`android/local.properties` (fichier non versionné) :
+La carte de l'écran de détail utilise le SDK Google Maps, dont la clé est **restreinte
+au nom de package de l'application et à l'empreinte SHA-1 de notre certificat de
+signature**. Elle n'est donc pas versionnée : le dépôt ne contient aucun secret.
+
+Conséquence pour qui recompile le projet : la carte s'affichera en gris, car votre
+certificat de debug a une empreinte différente de la nôtre. Deux solutions.
+
+**Pour voir l'application telle qu'elle fonctionne** — installez l'APK signé publié
+dans l'onglet [Releases](../../releases) du dépôt. Tout y fonctionne, carte comprise.
+
+**Pour recompiler avec votre propre clé** — créez une clé sur
+[Google Cloud Console](https://console.cloud.google.com/apis/credentials) avec le
+*Maps SDK for Android* activé, puis renseignez-la dans `android/local.properties`
+(fichier non versionné) :
 
 ```properties
 googleMapsApiKey=VOTRE_CLE_ANDROID
