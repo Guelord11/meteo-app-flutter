@@ -8,8 +8,9 @@ import UIKit
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-    // Renseigner la clé Google Maps iOS ici avant de lancer l'application.
-    GMSServices.provideAPIKey("VOTRE_CLE_GOOGLE_MAPS_IOS")
+    // Clé restreinte a l'identifiant de lot sn.isi.iage.meteoapp
+    // et a la seule API Maps SDK for iOS.
+    GMSServices.provideAPIKey("AIzaSyAXy5iS5ttmSSTaRKnzXYm_vGzmfBDKvxQ")
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }
 
