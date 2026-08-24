@@ -28,6 +28,16 @@ les résultats dans un tableau interactif relié à Google Maps.
 - **Rejouabilité** : une fois pleine, la jauge devient le bouton *Recommencer*. Le bouton retour
   ramène à l'écran d'accueil à tout moment.
 
+## Aperçu
+
+| Accueil | Jauge animée | Tableau interactif |
+| :---: | :---: | :---: |
+| ![Écran d'accueil](docs/captures/01-accueil.png) | ![Jauge de progression](docs/captures/02-jauge.png) | ![Tableau des 5 villes](docs/captures/03-tableau.png) |
+
+| Détail et carte | Mode sombre | Gestion des erreurs |
+| :---: | :---: | :---: |
+| ![Détail d'une ville avec Google Maps](docs/captures/04-detail-carte.png) | ![Mode sombre](docs/captures/05-mode-sombre.png) | ![Message d'erreur avec reprise](docs/captures/06-erreur.png) |
+
 ## Architecture
 
 ```
@@ -118,7 +128,17 @@ flutter test
 
 ## Répartition du travail
 
-Le détail des contributions de chaque membre est visible dans l'historique Git
-(`git log`) ainsi que dans l'onglet *Insights → Contributors* du dépôt GitHub.
-Chaque fonctionnalité a été développée sur une branche dédiée puis intégrée via une
-Pull Request relue par l'autre membre du groupe.
+Chaque membre a développé sa partie sur une branche dédiée, poussée depuis son
+propre compte GitHub, puis intégrée via une Pull Request relue par l'autre.
+
+| Pull Request | Auteur | Contenu | Relue par |
+| --- | --- | --- | --- |
+| [#1](../../pull/1) | Guelord KANYAMANDA MUMBERE | Modèles, client Retrofit, service météo, gestion des erreurs, écran de détail, carte Google Maps, configuration Android et iOS | Aman SOULE |
+| [#2](../../pull/2) | Aman SOULE | Thèmes clair et sombre, écran d'accueil, jauge animée, messages d'attente, tableau interactif, écran de chargement | Guelord KANYAMANDA MUMBERE |
+
+La relecture de la PR #2 a donné lieu à cinq corrections documentées
+(barre système invisible en mode clair, navigation retour, débordement du bouton
+« Recommencer », cohérence de l'icône de thème, suppression de code mort).
+
+Le détail complet est consultable via `git log`, l'onglet *Insights → Contributors*
+et les discussions des deux Pull Requests.
