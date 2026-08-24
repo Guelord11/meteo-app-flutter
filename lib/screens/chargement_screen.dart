@@ -81,22 +81,14 @@ class _ChargementScreenState extends State<ChargementScreen> {
     _charger();
   }
 
+  /// Ouvre le détail d'une ville. Le retour repose sur la pile de navigation
+  /// standard : il ramène au tableau, dont les résultats sont conservés dans
+  /// l'état de cet écran, puis à l'accueil. On peut ainsi consulter plusieurs
+  /// villes sans relancer le chargement.
   void _ouvrirDetail(Ville ville, Meteo meteo) {
     Navigator.of(context).push(
       MaterialPageRoute(
-        // Le bouton retour doit ramener directement à l'accueil, quel que
-        // soit l'écran. Depuis le détail, on intercepte donc le pop pour
-        // dépiler jusqu'à la première route plutôt que de repasser par
-        // l'écran de chargement.
-        builder: (routeContext) => PopScope(
-          canPop: false,
-          onPopInvokedWithResult: (didPop, result) {
-            if (!didPop) {
-              Navigator.of(routeContext).popUntil((route) => route.isFirst);
-            }
-          },
-          child: DetailScreen(ville: ville, meteo: meteo),
-        ),
+        builder: (context) => DetailScreen(ville: ville, meteo: meteo),
       ),
     );
   }
@@ -107,7 +99,7 @@ class _ChargementScreenState extends State<ChargementScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Chargement'),
+        title: const Text('Relevé météo'),
         actions: const [BoutonTheme(), SizedBox(width: 8)],
       ),
       body: Container(

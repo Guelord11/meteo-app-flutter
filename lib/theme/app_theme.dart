@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 /// Thèmes clair et sombre de l'application, construits à partir d'une même
@@ -37,6 +38,13 @@ class AppTheme {
         backgroundColor: Colors.transparent,
         foregroundColor: couleurs.onSurface,
         elevation: 0,
+        // L'AppBar deduit la couleur des icones systeme (heure, batterie,
+        // reseau) de sa couleur de fond. Celle-ci etant transparente, Flutter
+        // l'estime sombre et choisit des icones blanches, invisibles en mode
+        // clair : on impose donc le style correspondant au theme.
+        systemOverlayStyle: couleurs.brightness == Brightness.light
+            ? SystemUiOverlayStyle.dark
+            : SystemUiOverlayStyle.light,
         titleTextStyle: texte.titleLarge?.copyWith(
           fontWeight: FontWeight.bold,
           color: couleurs.onSurface,

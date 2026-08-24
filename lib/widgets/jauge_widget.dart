@@ -68,9 +68,15 @@ class JaugeWidget extends StatelessWidget {
       child: InkWell(
         customBorder: const CircleBorder(),
         onTap: onRecommencer,
-        child: Padding(
-          padding: const EdgeInsets.all(20),
+        // Taille carree explicite : un CircleBorder s'inscrit dans la plus
+        // petite dimension de sa boite. Dimensionne par son contenu, la boite
+        // etait plus large que haute (a cause du libelle) et le texte
+        // depassait du disque.
+        child: SizedBox(
+          width: 140,
+          height: 140,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(Icons.refresh_rounded, color: couleurs.onPrimary, size: 32),

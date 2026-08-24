@@ -30,7 +30,9 @@ class BoutonTheme extends StatelessWidget {
               );
             },
             child: Icon(
-              sombre ? Icons.dark_mode_rounded : Icons.light_mode_rounded,
+              // L'icone annonce l'action, comme le tooltip : en mode sombre on
+              // propose de passer au clair, donc un soleil.
+              sombre ? Icons.light_mode_rounded : Icons.dark_mode_rounded,
               key: ValueKey<bool>(sombre),
             ),
           ),
