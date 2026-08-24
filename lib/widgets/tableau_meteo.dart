@@ -54,8 +54,8 @@ class TableauMeteo extends StatelessWidget {
               onSelectChanged: (_) => onSelection(ville, meteo),
               cells: [
                 DataCell(Text(ville.nom)),
-                DataCell(Text('${meteo.temperature.round()}°C')),
-                DataCell(Text('${meteo.humidite}%')),
+                DataCell(Text('${meteo.temperature.round()} °C')),
+                DataCell(Text('${meteo.humidite} %')),
                 DataCell(
                   Row(
                     mainAxisSize: MainAxisSize.min,

@@ -64,21 +64,24 @@ class Meteo {
     }
   }
 
+  /// Couleur d'accompagnement de la condition, accordée à l'identité visuelle
+  /// de l'application (ambre solaire et vert baobab) plutôt qu'aux teintes
+  /// Material génériques, qui juraient avec la palette chaude des écrans.
   Color get couleur {
     switch (condition.main) {
       case 'Clear':
-        return Colors.orange;
+        return const Color(0xFFE8A33D); // ambre solaire
       case 'Clouds':
-        return Colors.blueGrey;
+        return const Color(0xFF8C7B6B); // gris chaud
       case 'Rain':
       case 'Drizzle':
-        return Colors.blue;
+        return const Color(0xFF2F8F80); // vert baobab
       case 'Thunderstorm':
-        return Colors.deepPurple;
+        return const Color(0xFF9C4221); // terre brûlée
       case 'Snow':
-        return Colors.lightBlue;
+        return const Color(0xFF7FA8B8); // bleu pâle
       default:
-        return Colors.teal;
+        return const Color(0xFF6B8E7A); // sauge
     }
   }
 }
