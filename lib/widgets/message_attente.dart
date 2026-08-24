@@ -61,7 +61,11 @@ class _MessageAttenteState extends State<MessageAttente> {
           MessageAttente._messages[index],
           key: ValueKey<int>(index),
           textAlign: TextAlign.center,
-          style: TextStyle(fontSize: 15, color: couleurs.onSurfaceVariant),
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: couleurs.onSurfaceVariant,
+          ),
         ),
       ),
     );

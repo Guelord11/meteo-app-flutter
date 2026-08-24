@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:meteo_app/theme/app_theme.dart';
 
 /// Jauge circulaire animée affichant la progression du chargement des
 /// données météo. Une fois [terminee], le pourcentage laisse place à un
@@ -20,6 +21,7 @@ class JaugeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme couleurs = Theme.of(context).colorScheme;
+    final Color accent = AppTheme.accentSecondaire(context);
 
     return TweenAnimationBuilder<double>(
       tween: Tween<double>(begin: 0, end: progression.clamp(0, 1)),
@@ -27,28 +29,44 @@ class JaugeWidget extends StatelessWidget {
       curve: Curves.easeOutCubic,
       builder: (context, valeur, _) {
         return SizedBox(
-          width: 220,
-          height: 220,
+          width: 216,
+          height: 216,
           child: CustomPaint(
             painter: _JaugePainter(
               progression: valeur,
               couleurPiste: couleurs.surfaceContainerHighest,
               couleurDebut: couleurs.primary,
-              couleurFin: couleurs.tertiary,
+              couleurFin: accent,
+              couleurSurface: couleurs.surface,
             ),
             child: Center(
               child: AnimatedSwitcher(
                 duration: const Duration(milliseconds: 300),
                 child: terminee
                     ? _boutonRecommencer(context)
-                    : Text(
-                        '${(valeur * 100).round()} %',
+                    : Column(
                         key: const ValueKey<String>('pourcentage'),
-                        style: TextStyle(
-                          fontSize: 40,
-                          fontWeight: FontWeight.bold,
-                          color: couleurs.onSurface,
-                        ),
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            '${(valeur * 100).round()}%',
+                            style: TextStyle(
+                              fontSize: 40,
+                              fontWeight: FontWeight.w800,
+                              color: couleurs.onSurface,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            'CHARGEMENT',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 1.2,
+                              color: couleurs.onSurfaceVariant,
+                            ),
+                          ),
+                        ],
                       ),
               ),
             ),
@@ -63,24 +81,25 @@ class JaugeWidget extends StatelessWidget {
 
     return Material(
       key: const ValueKey<String>('recommencer'),
-      color: couleurs.primary,
-      shape: const CircleBorder(),
+      color: Colors.transparent,
+      shape:
+          CircleBorder(side: BorderSide(color: couleurs.primary, width: 1.5)),
       child: InkWell(
         customBorder: const CircleBorder(),
         onTap: onRecommencer,
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.all(22),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.refresh_rounded, color: couleurs.onPrimary, size: 32),
+              Icon(Icons.refresh_rounded, color: couleurs.primary, size: 28),
               const SizedBox(height: 4),
               Text(
                 'Recommencer',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: couleurs.onPrimary,
-                  fontWeight: FontWeight.bold,
+                  color: couleurs.primary,
+                  fontWeight: FontWeight.w700,
                   fontSize: 12,
                 ),
               ),
@@ -97,15 +116,17 @@ class _JaugePainter extends CustomPainter {
   final Color couleurPiste;
   final Color couleurDebut;
   final Color couleurFin;
+  final Color couleurSurface;
 
   _JaugePainter({
     required this.progression,
     required this.couleurPiste,
     required this.couleurDebut,
     required this.couleurFin,
+    required this.couleurSurface,
   });
 
-  static const double _epaisseur = 16;
+  static const double _epaisseur = 14;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -127,11 +148,23 @@ class _JaugePainter extends CustomPainter {
       ..strokeWidth = _epaisseur
       ..strokeCap = StrokeCap.round
       ..shader = SweepGradient(
-        colors: [couleurDebut, couleurFin, couleurDebut],
+        colors: [couleurDebut, couleurFin],
         transform: const GradientRotation(-pi / 2),
       ).createShader(rect);
 
-    canvas.drawArc(rect, -pi / 2, 2 * pi * progression, false, arc);
+    final double angleParcouru = 2 * pi * progression;
+    canvas.drawArc(rect, -pi / 2, angleParcouru, false, arc);
+
+    // Petit repère « soleil » qui suit la pointe de l'arc.
+    final double angleFinal = -pi / 2 + angleParcouru;
+    final Offset pointe = Offset(
+      centre.dx + rayon * cos(angleFinal),
+      centre.dy + rayon * sin(angleFinal),
+    );
+    canvas.drawCircle(
+        pointe, _epaisseur / 2 + 3, Paint()..color = couleurSurface);
+    canvas.drawCircle(
+        pointe, _epaisseur / 2 - 1, Paint()..color = couleurDebut);
   }
 
   @override
@@ -139,6 +172,7 @@ class _JaugePainter extends CustomPainter {
     return oldDelegate.progression != progression ||
         oldDelegate.couleurPiste != couleurPiste ||
         oldDelegate.couleurDebut != couleurDebut ||
-        oldDelegate.couleurFin != couleurFin;
+        oldDelegate.couleurFin != couleurFin ||
+        oldDelegate.couleurSurface != couleurSurface;
   }
 }
