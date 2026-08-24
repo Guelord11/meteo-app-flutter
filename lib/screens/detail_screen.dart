@@ -6,13 +6,56 @@ import 'package:meteo_app/models/ville.dart';
 import 'package:meteo_app/theme/app_theme.dart';
 import 'package:meteo_app/widgets/bouton_theme.dart';
 
-class DetailScreen extends StatelessWidget {
+class DetailScreen extends StatefulWidget {
   final Ville ville;
   final Meteo meteo;
 
   const DetailScreen({super.key, required this.ville, required this.meteo});
 
+  @override
+  State<DetailScreen> createState() => _DetailScreenState();
+}
+
+class _DetailScreenState extends State<DetailScreen> {
+  /// Récupéré à la création de la carte, il pilote les déplacements de caméra.
+  GoogleMapController? _carte;
+
+  /// Vue plan par défaut, basculable en satellite.
+  MapType _typeCarte = MapType.normal;
+
+  static const double _zoomInitial = 11;
+
+  Ville get ville => widget.ville;
+  Meteo get meteo => widget.meteo;
+
   LatLng get position => LatLng(meteo.coord.lat, meteo.coord.lon);
+
+  @override
+  void dispose() {
+    _carte?.dispose();
+    super.dispose();
+  }
+
+  void _zoomer(double delta) {
+    _carte?.animateCamera(CameraUpdate.zoomBy(delta));
+  }
+
+  /// Ramène la caméra sur la ville, quel que soit l'endroit où l'utilisateur
+  /// a fait glisser la carte.
+  void _recentrer() {
+    _carte?.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(target: position, zoom: _zoomInitial),
+      ),
+    );
+  }
+
+  void _basculerTypeCarte() {
+    setState(() {
+      _typeCarte =
+          _typeCarte == MapType.normal ? MapType.hybrid : MapType.normal;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,24 +122,67 @@ class DetailScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                   child: SizedBox(
                     height: 280,
-                    child: GoogleMap(
-                      initialCameraPosition: CameraPosition(
-                        target: position,
-                        zoom: 11,
-                      ),
-                      markers: {
-                        Marker(
-                          markerId: MarkerId(ville.nom),
-                          position: position,
-                          infoWindow: InfoWindow(
-                            title: ville.nom,
-                            snippet:
-                                '${meteo.temperature.round()} °C · ${meteo.condition.libelle}',
+                    child: Stack(
+                      children: [
+                        GoogleMap(
+                          initialCameraPosition: CameraPosition(
+                            target: position,
+                            zoom: _zoomInitial,
+                          ),
+                          onMapCreated: (controleur) => _carte = controleur,
+                          mapType: _typeCarte,
+                          markers: {
+                            Marker(
+                              markerId: MarkerId(ville.nom),
+                              position: position,
+                              infoWindow: InfoWindow(
+                                title: ville.nom,
+                                snippet:
+                                    '${meteo.temperature.round()} °C · ${meteo.condition.libelle}',
+                              ),
+                            ),
+                          },
+                          myLocationButtonEnabled: false,
+                          // Les commandes natives sont remplacees par les
+                          // boutons ci-dessous, accordes au theme.
+                          zoomControlsEnabled: false,
+                        ),
+                        Positioned(
+                          top: 12,
+                          right: 12,
+                          child: Column(
+                            children: [
+                              _boutonCarte(
+                                icone: Icons.add,
+                                infobulle: 'Zoomer',
+                                onTap: () => _zoomer(1),
+                              ),
+                              const SizedBox(height: 8),
+                              _boutonCarte(
+                                icone: Icons.remove,
+                                infobulle: 'Dézoomer',
+                                onTap: () => _zoomer(-1),
+                              ),
+                              const SizedBox(height: 8),
+                              _boutonCarte(
+                                icone: Icons.my_location_rounded,
+                                infobulle: 'Recentrer sur ${ville.nom}',
+                                onTap: _recentrer,
+                              ),
+                              const SizedBox(height: 8),
+                              _boutonCarte(
+                                icone: _typeCarte == MapType.normal
+                                    ? Icons.satellite_alt_rounded
+                                    : Icons.map_rounded,
+                                infobulle: _typeCarte == MapType.normal
+                                    ? 'Vue satellite'
+                                    : 'Vue plan',
+                                onTap: _basculerTypeCarte,
+                              ),
+                            ],
                           ),
                         ),
-                      },
-                      myLocationButtonEnabled: false,
-                      zoomControlsEnabled: false,
+                      ],
                     ),
                   ),
                 ),
@@ -111,6 +197,33 @@ class DetailScreen extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  /// Bouton rond superposé à la carte, accordé au thème de l'application.
+  Widget _boutonCarte({
+    required IconData icone,
+    required String infobulle,
+    required VoidCallback onTap,
+  }) {
+    final ColorScheme couleurs = Theme.of(context).colorScheme;
+
+    return Tooltip(
+      message: infobulle,
+      child: Material(
+        color: couleurs.surface.withValues(alpha: .92),
+        shape: const CircleBorder(),
+        elevation: 2,
+        child: InkWell(
+          customBorder: const CircleBorder(),
+          onTap: onTap,
+          child: SizedBox(
+            width: 40,
+            height: 40,
+            child: Icon(icone, size: 20, color: couleurs.onSurface),
           ),
         ),
       ),

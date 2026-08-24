@@ -21,7 +21,9 @@ les résultats dans un tableau interactif relié à Google Maps.
 - **Tableau interactif** : dès la jauge remplie, les 5 villes s'affichent avec température,
   humidité et condition du ciel. Chaque ligne est cliquable.
 - **Page de détail** : relevé complet (ressenti, min/max, humidité, pression, vent et sa
-  direction) et localisation exacte de la ville sur une carte Google Maps.
+  direction) et localisation exacte de la ville sur une carte Google Maps, avec des
+  commandes de navigation intégrées : zoom avant, zoom arrière, recentrage sur la ville
+  et bascule entre vue plan et vue satellite.
 - **Gestion des erreurs** : en cas d'échec d'un appel, un message explicite s'affiche avec un
   bouton *Réessayer* qui reprend le chargement là où il s'était arrêté.
 - **Mode clair / mode sombre** : bascule disponible depuis n'importe quel écran.
