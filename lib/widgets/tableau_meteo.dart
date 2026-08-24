@@ -23,62 +23,66 @@ class TableauMeteo extends StatelessWidget {
   Widget build(BuildContext context) {
     final ColorScheme couleurs = Theme.of(context).colorScheme;
 
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: DataTable(
-        // Sans ça, DataTable ajoute automatiquement une colonne de cases à
-        // cocher dès qu'une DataRow a un onSelectChanged.
-        showCheckboxColumn: false,
-        columnSpacing: 14,
-        horizontalMargin: 16,
-        headingTextStyle: TextStyle(
-          fontWeight: FontWeight.bold,
-          color: couleurs.onSurface,
-        ),
-        dataTextStyle: TextStyle(color: couleurs.onSurface),
-        columns: const [
-          DataColumn(label: Text('Ville')),
-          DataColumn(label: Text('Temp.'), numeric: true),
-          DataColumn(label: Text('Hum.'), numeric: true),
-          DataColumn(label: Text('Ciel')),
-          DataColumn(label: Text('')),
-        ],
-        rows: List<DataRow>.generate(villes.length, (i) {
-          final Ville ville = villes[i];
-          final Meteo meteo = meteos[i];
+    return Container(
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: couleurs.surfaceContainerHighest.withValues(alpha: .35),
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: DataTable(
+          // Sans ça, DataTable ajoute automatiquement une colonne de cases à
+          // cocher dès qu'une DataRow a un onSelectChanged.
+          showCheckboxColumn: false,
+          columnSpacing: 14,
+          horizontalMargin: 16,
+          headingRowColor: WidgetStateProperty.all(Colors.transparent),
+          dataRowColor: WidgetStateProperty.all(Colors.transparent),
+          columns: const [
+            DataColumn(label: Text('Ville')),
+            DataColumn(label: Text('Temp.'), numeric: true),
+            DataColumn(label: Text('Hum.'), numeric: true),
+            DataColumn(label: Text('Ciel')),
+            DataColumn(label: Text('')),
+          ],
+          rows: List<DataRow>.generate(villes.length, (i) {
+            final Ville ville = villes[i];
+            final Meteo meteo = meteos[i];
 
-          return DataRow(
-            onSelectChanged: (_) => onSelection(ville, meteo),
-            cells: [
-              DataCell(Text(ville.nom)),
-              DataCell(Text('${meteo.temperature.round()} °C')),
-              DataCell(Text('${meteo.humidite} %')),
-              DataCell(
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(meteo.icone, size: 18, color: meteo.couleur),
-                    const SizedBox(width: 6),
-                    // Les libellés OpenWeather vont de « Clair » à
-                    // « Partiellement nuageux » : on borne plutôt que de
-                    // rogner les marges pour ne pas faire déborder la ligne.
-                    ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 104),
-                      child: Text(
-                        meteo.condition.libelle,
-                        overflow: TextOverflow.ellipsis,
+            return DataRow(
+              onSelectChanged: (_) => onSelection(ville, meteo),
+              cells: [
+                DataCell(Text(ville.nom)),
+                DataCell(Text('${meteo.temperature.round()}°C')),
+                DataCell(Text('${meteo.humidite}%')),
+                DataCell(
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(meteo.icone, size: 18, color: meteo.couleur),
+                      const SizedBox(width: 6),
+                      // Les libellés OpenWeather vont de « Clair » à
+                      // « Partiellement nuageux » : on borne plutôt que de
+                      // rogner les marges pour ne pas faire déborder la ligne.
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 104),
+                        child: Text(
+                          meteo.condition.libelle,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              DataCell(
-                Icon(Icons.chevron_right_rounded,
-                    color: couleurs.onSurfaceVariant),
-              ),
-            ],
-          );
-        }),
+                DataCell(
+                  Icon(Icons.chevron_right_rounded,
+                      size: 18, color: couleurs.onSurfaceVariant),
+                ),
+              ],
+            );
+          }),
+        ),
       ),
     );
   }

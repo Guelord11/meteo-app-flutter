@@ -4,16 +4,13 @@ import 'package:meteo_app/models/ville.dart';
 import 'package:meteo_app/screens/detail_screen.dart';
 import 'package:meteo_app/services/api_config.dart';
 import 'package:meteo_app/services/meteo_service.dart';
-import 'package:meteo_app/theme/app_theme.dart';
+import 'package:meteo_app/theme/app_dimens.dart';
 import 'package:meteo_app/widgets/bouton_theme.dart';
 import 'package:meteo_app/widgets/erreur_widget.dart';
 import 'package:meteo_app/widgets/jauge_widget.dart';
 import 'package:meteo_app/widgets/message_attente.dart';
 import 'package:meteo_app/widgets/tableau_meteo.dart';
 
-/// Écran qui pilote le chargement séquentiel de la météo des 5 villes :
-/// jauge de progression, messages d'attente, gestion des erreurs (avec
-/// reprise là où ça s'est arrêté) puis tableau des résultats.
 class ChargementScreen extends StatefulWidget {
   const ChargementScreen({super.key});
 
@@ -100,45 +97,40 @@ class _ChargementScreenState extends State<ChargementScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Relevé météo'),
-        actions: const [BoutonTheme(), SizedBox(width: 8)],
+        actions: const [BoutonTheme(), SizedBox(width: 12)],
       ),
-      body: Container(
-        constraints: const BoxConstraints.expand(),
-        decoration: BoxDecoration(gradient: AppTheme.degrade(context)),
-        child: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(20, 24, 20, 32),
-            child: Column(
-              children: [
-                JaugeWidget(
-                  progression: progression,
-                  terminee: termine,
-                  onRecommencer: recommencer,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  '${resultats.length} / ${villes.length} villes chargées',
-                  style:
-                      TextStyle(fontSize: 15, color: couleurs.onSurfaceVariant),
-                ),
-                if (enCours) ...[
-                  const SizedBox(height: 20),
-                  const MessageAttente(),
-                ],
-                if (erreur != null) ...[
-                  const SizedBox(height: 20),
-                  ErreurWidget(message: erreur!, onReessayer: _charger),
-                ],
-                if (termine) ...[
-                  const SizedBox(height: 24),
-                  TableauMeteo(
-                    villes: villes,
-                    meteos: resultats,
-                    onSelection: _ouvrirDetail,
-                  ),
-                ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
+          child: Column(
+            children: [
+              JaugeWidget(
+                progression: progression,
+                terminee: termine,
+                onRecommencer: recommencer,
+              ),
+              const SizedBox(height: AppDimens.espaceL),
+              Text(
+                '${resultats.length} / ${villes.length} villes chargées',
+                style: TextStyle(fontSize: 14, color: couleurs.onSurfaceVariant),
+              ),
+              if (enCours) ...[
+                const SizedBox(height: AppDimens.espaceXL),
+                const MessageAttente(),
               ],
-            ),
+              if (erreur != null) ...[
+                const SizedBox(height: AppDimens.espaceXL),
+                ErreurWidget(message: erreur!, onReessayer: _charger),
+              ],
+              if (termine) ...[
+                const SizedBox(height: AppDimens.espaceXXL),
+                TableauMeteo(
+                  villes: villes,
+                  meteos: resultats,
+                  onSelection: _ouvrirDetail,
+                ),
+              ],
+            ],
           ),
         ),
       ),
