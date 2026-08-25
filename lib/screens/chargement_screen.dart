@@ -48,8 +48,9 @@ class _ChargementScreenState extends State<ChargementScreen> {
       if (!mounted) return;
 
       try {
-        final Meteo meteo =
-            await service.chargerVille(villes[resultats.length]);
+        final Meteo meteo = await service.chargerVille(
+          villes[resultats.length],
+        );
         if (!mounted) return;
         setState(() {
           resultats.add(meteo);
@@ -102,35 +103,45 @@ class _ChargementScreenState extends State<ChargementScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(24, 16, 24, 32),
-          child: Column(
-            children: [
-              JaugeWidget(
-                progression: progression,
-                terminee: termine,
-                onRecommencer: recommencer,
-              ),
-              const SizedBox(height: AppDimens.espaceL),
-              Text(
-                '${resultats.length} / ${villes.length} villes chargées',
-                style: TextStyle(fontSize: 14, color: couleurs.onSurfaceVariant),
-              ),
-              if (enCours) ...[
-                const SizedBox(height: AppDimens.espaceXL),
-                const MessageAttente(),
-              ],
-              if (erreur != null) ...[
-                const SizedBox(height: AppDimens.espaceXL),
-                ErreurWidget(message: erreur!, onReessayer: _charger),
-              ],
-              if (termine) ...[
-                const SizedBox(height: AppDimens.espaceXXL),
-                TableauMeteo(
-                  villes: villes,
-                  meteos: resultats,
-                  onSelection: _ouvrirDetail,
+          // Un SingleChildScrollView vertical transmet des contraintes
+          // horizontales laches : sans largeur imposee, la Column se
+          // dimensionne sur son enfant le plus large et le viewport l'aligne
+          // a gauche, ce qui decale tout le contenu.
+          child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              children: [
+                JaugeWidget(
+                  progression: progression,
+                  terminee: termine,
+                  onRecommencer: recommencer,
                 ),
+                const SizedBox(height: AppDimens.espaceL),
+                Text(
+                  '${resultats.length} / ${villes.length} villes chargées',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: couleurs.onSurfaceVariant,
+                  ),
+                ),
+                if (enCours) ...[
+                  const SizedBox(height: AppDimens.espaceXL),
+                  const MessageAttente(),
+                ],
+                if (erreur != null) ...[
+                  const SizedBox(height: AppDimens.espaceXL),
+                  ErreurWidget(message: erreur!, onReessayer: _charger),
+                ],
+                if (termine) ...[
+                  const SizedBox(height: AppDimens.espaceXXL),
+                  TableauMeteo(
+                    villes: villes,
+                    meteos: resultats,
+                    onSelection: _ouvrirDetail,
+                  ),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),
