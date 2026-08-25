@@ -66,6 +66,7 @@ lib/
 │   └── bouton_theme.dart           Bascule clair / sombre
 └── theme/
     ├── app_theme.dart              Thèmes clair et sombre
+    ├── app_dimens.dart             Échelle d'espacement
     └── theme_controller.dart       État du mode d'affichage
 ```
 
