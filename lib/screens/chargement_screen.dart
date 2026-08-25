@@ -84,7 +84,8 @@ class _ChargementScreenState extends State<ChargementScreen> {
   /// l'état de cet écran, puis à l'accueil. On peut ainsi consulter plusieurs
   /// villes sans relancer le chargement.
   void _ouvrirDetail(Ville ville, Meteo meteo) {
-    Navigator.of(context).push(
+    Navigator.push(
+      context,
       MaterialPageRoute(
         builder: (context) => DetailScreen(ville: ville, meteo: meteo),
       ),
