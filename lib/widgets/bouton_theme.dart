@@ -34,8 +34,6 @@ class BoutonTheme extends StatelessWidget {
               child: ScaleTransition(scale: animation, child: child),
             ),
             child: Icon(
-              // L'icone annonce l'action, comme le tooltip : en mode sombre on
-              // propose de passer au clair, donc un soleil.
               sombre ? Icons.light_mode_rounded : Icons.dark_mode_rounded,
               key: ValueKey<bool>(sombre),
               size: 20,

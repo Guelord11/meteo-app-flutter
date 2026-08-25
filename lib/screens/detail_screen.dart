@@ -143,8 +143,6 @@ class _DetailScreenState extends State<DetailScreen> {
                             ),
                           },
                           myLocationButtonEnabled: false,
-                          // Les commandes natives sont remplacees par les
-                          // boutons ci-dessous, accordes au theme.
                           zoomControlsEnabled: false,
                         ),
                         Positioned(
@@ -292,8 +290,6 @@ class _DetailScreenState extends State<DetailScreen> {
         border: Border.all(color: couleurs.outlineVariant),
       ),
       child: Column(
-        // Alignement en haut : sans cela, une valeur sur deux lignes (le vent
-        // et sa direction) decale son libelle par rapport a la carte voisine.
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [

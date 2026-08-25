@@ -87,10 +87,6 @@ class JaugeWidget extends StatelessWidget {
       child: InkWell(
         customBorder: const CircleBorder(),
         onTap: onRecommencer,
-        // Taille carree explicite : un CircleBorder s'inscrit dans la plus
-        // petite dimension de sa boite. Dimensionnee par son contenu, elle
-        // etait plus large que haute a cause du libelle, et le texte
-        // chevauchait le trace du cercle.
         child: SizedBox(
           width: 148,
           height: 148,
@@ -161,7 +157,6 @@ class _JaugePainter extends CustomPainter {
     final double angleParcouru = 2 * pi * progression;
     canvas.drawArc(rect, -pi / 2, angleParcouru, false, arc);
 
-    // Petit repère « soleil » qui suit la pointe de l'arc.
     final double angleFinal = -pi / 2 + angleParcouru;
     final Offset pointe = Offset(
       centre.dx + rayon * cos(angleFinal),

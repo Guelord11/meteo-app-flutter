@@ -32,8 +32,6 @@ class TableauMeteo extends StatelessWidget {
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: DataTable(
-          // Sans ça, DataTable ajoute automatiquement une colonne de cases à
-          // cocher dès qu'une DataRow a un onSelectChanged.
           showCheckboxColumn: false,
           columnSpacing: 14,
           horizontalMargin: 16,
@@ -62,9 +60,6 @@ class TableauMeteo extends StatelessWidget {
                     children: [
                       Icon(meteo.icone, size: 18, color: meteo.couleur),
                       const SizedBox(width: 6),
-                      // Les libellés OpenWeather vont de « Clair » à
-                      // « Partiellement nuageux » : on borne plutôt que de
-                      // rogner les marges pour ne pas faire déborder la ligne.
                       ConstrainedBox(
                         constraints: const BoxConstraints(maxWidth: 104),
                         child: Text(

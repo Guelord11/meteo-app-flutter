@@ -21,10 +21,6 @@ class AccueilScreen extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(24, 8, 24, 32),
-          // Un SingleChildScrollView vertical transmet des contraintes
-          // horizontales laches : sans largeur imposee, la Column se
-          // dimensionne sur son enfant le plus large et le viewport l'aligne
-          // a gauche, ce qui decale tout le contenu.
           child: SizedBox(
             width: double.infinity,
             child: Column(
